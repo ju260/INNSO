@@ -3,26 +3,31 @@
     <filter-tab @inputSearch="inputSearch" />
     <table class="table table-bordered dataTable table-sm table-striped">
       <thead>
-          <tr>
-            <th class="th-sm sorting" v-for="(field, index) in fields" :key="index" @click="sort(field.name)">
-                {{ field.label }}
-                <i class="fas fa-sort float-right"></i>
-            </th>
-          </tr>
+        <tr>
+          <th
+            class="th-sm sorting"
+            v-for="(field, index) in fields"
+            :key="index"
+            @click="sort(field.name)"
+          >
+            {{ field.label }}
+            <i class="fas fa-sort float-right"></i>
+          </th>
+        </tr>
       </thead>
       <tbody>
         <tr v-for="(data, index) in datas" :key="index">
           <td>{{ userName(data) }}</td>
           <td v-html="status(data)"></td>
-          <td>{{ birthdate(data)|formatDate }}</td>
+          <td>{{ birthdate(data) | formatDate }}</td>
           <td>{{ phone(data) }}</td>
           <td>{{ contactChannel(data) }}</td>
           <td>{{ assignTo(data) }}</td>
           <td>
             <p class="comment-1" v-readMore:150="comment(data)"></p>
           </td>
-          <td>{{ dateCreation(data)|formatDate2 }}</td>
-          <td>{{ dueDate(data)|formatDate2 }}</td>
+          <td>{{ dateCreation(data) | formatDate2 }}</td>
+          <td>{{ dueDate(data) | formatDate2 }}</td>
           <td v-html="attachments(data)"></td>
         </tr>
       </tbody>
@@ -37,13 +42,13 @@ import _ from "lodash";
 import "bootstrap-css-only/css/bootstrap.min.css";
 import json from "../assets/MOCK_DATA.json";
 import moment from "moment-timezone";
-import FilterTab from "@/components/FilterTab"
+import FilterTab from "@/components/FilterTab";
 
 Vue.use(ReadMore);
 
 export default {
   name: "JuTabDatas",
-  components:{
+  components: {
     FilterTab
   },
   data() {
@@ -194,14 +199,18 @@ export default {
         property = property.substr(1);
       }
 
-      let listUserKeys = ["first_name", "birthday", "phone", "email", "phone" ];
+      let listUserKeys = ["first_name", "birthday", "phone", "email", "phone"];
 
       if (listUserKeys.includes(property)) {
         return function(a, b) {
           if (sortOrder == -1) {
-            return b["customer"][property].localeCompare(a["customer"][property]);
+            return b["customer"][property].localeCompare(
+              a["customer"][property]
+            );
           } else {
-            return a["customer"][property].localeCompare(b["customer"][property]);
+            return a["customer"][property].localeCompare(
+              b["customer"][property]
+            );
           }
         };
       } else {
@@ -214,15 +223,22 @@ export default {
         };
       }
     },
-    inputSearch({value}) {
-      if(value === "") { this.datas=this.json; return }
-       
-       var filterKey = value && value.toLowerCase()
-       this.datas = this.datas.filter(function (row) {
-          return Object.keys(row).some(function (key) {
-            return String(row[key]).toLowerCase().indexOf(filterKey) > -1
-          })
-        })
+    inputSearch({ value }) {
+      if (value === "") {
+        this.datas = this.json;
+        return;
+      }
+
+      var filterKey = value && value.toLowerCase();
+      this.datas = this.datas.filter(function(row) {
+        return Object.keys(row).some(function(key) {
+          return (
+            String(row[key])
+              .toLowerCase()
+              .indexOf(filterKey) > -1
+          );
+        });
+      });
       //this.datas = _.filter(this.datas, ['customer.last_name', value] )
     }
   },
@@ -230,7 +246,7 @@ export default {
 };
 </script>
 
-<style lang="scss" >
+<style lang="scss">
 .status {
   &--waiting {
     background-color: red;
@@ -252,7 +268,7 @@ export default {
 table.table a {
   color: blue;
 }
-table.table thead th:hover{
+table.table thead th:hover {
   cursor: pointer;
 }
 </style>

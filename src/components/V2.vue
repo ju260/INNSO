@@ -1,14 +1,15 @@
 <template>
   <div>
     <vuetable
+      :css="table"
       ref="vuetable"
       :api-mode="false"
       :fields="fields"
       :per-page="perPage"
       pagination-path="pagination"
       :data-manager="dataManager"
-     @vuetable:pagination-data="onPaginationData"
-    >   <template slot="actions" scope="props">
+      @vuetable:pagination-data="onPaginationData"
+    ><template slot="actions" scope="props">
       <div class="table-button-container">
           <button class="btn btn-warning btn-sm" @click="editRow(props.rowData)">
             <span class="glyphicon glyphicon-pencil"></span> Edit</button>&nbsp;&nbsp;
@@ -16,14 +17,14 @@
             <span class="glyphicon glyphicon-trash"></span> Delete</button>&nbsp;&nbsp;
       </div>
       </template></vuetable>
-    <vuetable-pagination ref="pagination" @vuetable-pagination:change-page="onChangePage"></vuetable-pagination>
+    <vuetable-pagination ref="pagination" :css="pagination" @vuetable-pagination:change-page="onChangePage"></vuetable-pagination>
   </div>
 </template>
 
 <script>
 import _ from "lodash";
 import Vuetable from "vuetable-2/src/components/Vuetable";
-import VuetablePagination from 'vuetable-2/src/components/VuetablePagination';
+import VuetablePagination from "vuetable-2/src/components/VuetablePagination";
 import json from "../assets/MOCK_DATA.json";
 import moment from "moment-timezone";
 
@@ -90,6 +91,39 @@ export default {
           dataClass: "right aligned"
         }
       ],
+      table: {
+        tableWrapper: "",
+        tableHeaderClass: "mb-0",
+        tableBodyClass: "mb-0",
+        tableClass: "table table-bordered table-hover",
+        loadingClass: "loading",
+        ascendingIcon: "fa fa-chevron-up",
+        descendingIcon: "fa fa-chevron-down",
+        ascendingClass: "sorted-asc",
+        descendingClass: "sorted-desc",
+        sortableIcon: "fa fa-sort",
+        detailRowClass: "vuetable-detail-row",
+        handleIcon: "fa fa-bars text-secondary",
+        renderIcon(classes, options) {
+          return `<i class="${classes.join(" ")}"></span>`;
+        }
+      },
+      pagination: {
+        wrapperClass: "pagination float-right",
+        activeClass: "active",
+        disabledClass: "disabled",
+        pageClass: "page-item",
+        linkClass: "page-link",
+        paginationClass: "pagination",
+        paginationInfoClass: "float-left",
+        dropdownClass: "form-control",
+        icons: {
+          first: "fa fa-chevron-left",
+          prev: "fa fa-chevron-left",
+          next: "fa fa-chevron-right",
+          last: "fa fa-chevron-right"
+        }
+      },
       perPage: 15,
       data: []
     };
@@ -100,8 +134,7 @@ export default {
     }
   },
   mounted() {
-   this.transform(json);
-
+    this.transform(json);
   },
   methods: {
     onPaginationData(paginationData) {
@@ -155,7 +188,7 @@ export default {
         to: data.to
       };
 
-       transformed.mydata = [];
+      transformed.mydata = [];
 
       for (var i = 0; i < data.length; i++) {
         transformed.mydata.push({
@@ -186,23 +219,14 @@ export default {
             "null"
           )}" class="waves-effect mdb-icon-copy far fa-file"></a>`
         });
-        this.data=transformed.mydata;
+        this.data = transformed.mydata;
       }
       return transformed;
     },
-    allcap(value) {
-      return value.toUpperCase();
-    },
-    genderLabel(value) {
-      return value === "M"
-        ? '<span class="ui teal label"><i class="large man icon"></i>Male</span>'
-        : '<span class="ui pink label"><i class="large woman icon"></i>Female</span>';
-    },
     formatNumber(value) {
-      return accounting.formatNumber(value, 2);
+      // return accounting.formatNumber(value, 2);
     },
     formatDate(value, fmt = "D MMM YYYY") {
-      console.log('t')
       return value == null ? "" : moment(value, "YYYY-MM-DD").format(fmt);
     }
   }

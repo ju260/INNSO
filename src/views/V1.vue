@@ -114,12 +114,11 @@ export default {
         )}" class="waves-effect mdb-icon-copy far fa-file"></a>`
       });
     }
-    
   }
 };
 </script>
 
-<style lang="scss" >
+<style lang="scss">
 .status {
   &--waiting {
     background-color: red;
